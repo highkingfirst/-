@@ -1,0 +1,92 @@
+int num1 = 222;         //全局变量，具有文件作用域的变量
+static int num2 = 111;  //静态全局变量，在函数外被定义
+int add(int a,int b){    
+static int tempSum = 0;  //静态局部变量，在函数体中定义   
+tempSum = tempSum + a + b;    
+return tempSum;
+} 
+
+class Student{
+public:
+    Student(char *name, int age, float score);
+    void show();
+public:
+    static int m_total;  //静态成员变量定义在类中，是一种特殊的成员变量，被关键字static修饰
+private:
+    char *m_name;
+    int m_age;
+    float m_score;
+};
+2.该函数通过传入的变量指针实现外部参数自增1的改变
+void f1(int* x){
+	(*x)++;  
+}
+int main()
+{
+	int a = 1;
+	f1(&a);
+	printf("%d",a);
+	return 0;
+}
+ 
+3. 在有指针的情况下，浅拷贝只是增加了一个指针指向已经存在的内存，而深拷贝就是增加一个指针并且申请一个新的内存，使这个增加的指针指向这个新的内存，采用深拷贝的情况下，释放内存的时候就不会出现在浅拷贝时重复释放同一内存的错误。
+class string
+{
+char *m_str;
+public:
+string(char *s）
+{
+m_str=s;
+}
+string()
+{};
+String & operator=(const string s)
+{
+m_str=s.m_str;
+return *this
+}
+};
+int main()
+{
+string s1("abc"),s2;
+s2=s1;
+cout<<s2.m_str;
+}
+上面的 =重载其是就是实现了浅拷贝，是由于对象之中含有指针数据类型.s1,s2恰好指向同一各内存。
+如果修改一下原来的程序：
+string&operator=(const string&s)
+{
+if(strlen(m_str)!=strlen(s.m_str))
+m_str=new char[strlen(s.m_str)+1];
+if(*this!=s)
+strcopy(m_str,s.m_str);
+return *this;
+}
+这样就实现了深拷贝，原因是为被赋值对象申请了一个新的内存。
+
+int a = 0; //全局初始化区 
+char *p1; //全局未初始化区 
+main() 
+{ 
+    int b; //栈 
+    char s[] = "abc"; //栈 
+    char *p2; //栈 
+    char *p3 = "123456"; //123456\0在常量区，p3在栈上。 
+    static int c =0； //全局（静态）初始化区 
+    p1 = (char *)malloc(10); //堆 
+    p2 = (char *)malloc(20);  //堆 
+}
+栈是系统自动分配空间的，例如定义一个 char a；系统会自动在栈上为其开辟空间。堆是程序员根据需要自己申请的空间，例如malloc（10）；开辟十个字节的空间。
+
+局部变量：
+生命周期：从定义开始，到该模块结束
+作用域：该模块内
+static修饰的局部变量：
+生命周期：从定义开始，到程序结束
+作用域：该模块内
+全局变量：
+生命周期：从定义开始，到程序结束
+作用域：整个程序
+static修饰的全局变量：
+生命周期：从定义开始，到程序结束
+作用域：本文件内
